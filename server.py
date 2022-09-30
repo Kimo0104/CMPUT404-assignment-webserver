@@ -103,6 +103,7 @@ class MyWebServer(socketserver.BaseRequestHandler):
         else:
             self.handle_invalid_route()
     
+    # Handles percent encoding
     def handle_percentages(self,route):
         n = len(route)
         new_route = ""
