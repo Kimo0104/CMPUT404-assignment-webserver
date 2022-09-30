@@ -33,6 +33,7 @@ class MyWebServer(socketserver.BaseRequestHandler):
         self.data = self.request.recv(1024).decode("utf-8").strip().split()
         request_type, route = self.data[0], self.data[1]
         if "../" in route: self.handle_invalid_route() 
+        if '%' in route: route = self.handle_percentages(route)
         self.handle_invalid_request() if request_type != 'GET' else self.provide_response(route)
 
     def file_exists(self, route):
@@ -101,6 +102,27 @@ class MyWebServer(socketserver.BaseRequestHandler):
             self.handle_file_request(route)
         else:
             self.handle_invalid_route()
+    
+    def handle_percentages(self,route):
+        n = len(route)
+        new_route = ""
+        i = 0
+        while i < n:
+            c = route[i]
+            if c != '%':
+                new_route += c
+                i+=1
+            else:
+                new_route+=self.get_percentage_string(route[i:i+3])
+                i+=3
+        return new_route
+    
+    # Motivation from Ξένη Γήινος
+    # https://stackoverflow.com/a/69284318/19905668
+    def get_percentage_string(self,s):
+        data = bytearray()
+        data.append(int(s[1:3],16))
+        return data.decode('utf-8')
 
 if __name__ == "__main__":
     HOST, PORT = "localhost", 8080
