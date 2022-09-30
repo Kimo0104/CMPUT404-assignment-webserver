@@ -118,7 +118,7 @@ class MyWebServer(socketserver.BaseRequestHandler):
         return new_route
     
     # Motivation from Ξένη Γήινος
-    # https://stackoverflow.com/a/69284318/19905668
+    # https://stackoverflow.com/a/73782152/19905668
     def get_percentage_string(self,s):
         data = bytearray()
         data.append(int(s[1:3],16))
